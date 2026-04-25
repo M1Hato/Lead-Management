@@ -26,6 +26,8 @@ services:
     container_name: landings_service
     ports:
       - "8001:8000"
+    volumes:
+      - ./landings:/app
     env_file:
       - ./landings/.env
     depends_on:
@@ -38,6 +40,8 @@ services:
     container_name: core_service
     ports:
       - "8002:8000"
+    volumes:
+      - ./core:/app
     env_file:
       - ./core/.env
     depends_on:
@@ -48,6 +52,8 @@ services:
     build: ./core
     container_name: worker
     command: python -m src.worker
+    volumes:
+      - ./core:/app
     env_file:
       - ./core/.env
     depends_on:

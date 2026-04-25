@@ -13,9 +13,9 @@ class LeadModel(Base):
     phone: Mapped[str] = mapped_column(String(50))
     country: Mapped[str] = mapped_column(String(2))
 
-    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    offer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("offers.id"))
-    affiliate_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("affiliates.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), index=True)
+    offer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("offers.id"), index=True)
+    affiliate_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("affiliates.id"), index=True)
 
 
     offer: Mapped["OffersModel"] = relationship(back_populates="leads")

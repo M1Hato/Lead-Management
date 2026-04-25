@@ -6,7 +6,6 @@ from sqlalchemy.exc import IntegrityError
 
 from src.models.affiliates_model import AffiliatesModel
 from src.models.offers_model import OffersModel
-from src.models.leads_model import LeadModel
 from src.database import get_async_session
 from src.models.leads_model import LeadModel
 from src.cfg.redis import redis_client

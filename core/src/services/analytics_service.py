@@ -14,6 +14,8 @@ class AnalyticsService:
             affiliate_id: str,
             date_from: date,
             date_to: date,
+            limit: int,
+            offset: int,
             group_by: Literal["date", "offer"]
     ):
 
@@ -25,7 +27,7 @@ class AnalyticsService:
             LeadModel.affiliate_id == affiliate_id,
             LeadModel.created_at >= start_date,
             LeadModel.created_at <= end_date,
-        )
+        ).order_by(LeadModel.created_at.desc()).limit(limit).offset(offset)
 
         result = await db.execute(query)
         leads = result.scalars().all()
