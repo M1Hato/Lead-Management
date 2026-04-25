@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # PostgreSQL
+  db:
+    image: postgres:17
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  # Landings
+  landings:
+    build: ./landings
+    container_name: landings_service
+    ports:
+      - "8001:8000"
+    env_file:
+      - ./landings/.env
+    depends_on:
+      - redis
+      - db
+
+  # Core
+  core_api:
+    build: ./core
+    container_name: core_service
+    ports:
+      - "8002:8000"
+    env_file:
+      - ./core/.env
+    depends_on:
+      - db
+
+  # worker
+  worker:
+    build: ./core
+    container_name: worker
+    command: python -m src.worker
+    env_file:
+      - ./core/.env
+    depends_on:
+      - redis
+      - db
